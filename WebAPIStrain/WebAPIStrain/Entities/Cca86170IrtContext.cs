@@ -1,0 +1,713 @@
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+
+namespace WebAPIStrain.Entities;
+
+public partial class Cca86170IrtContext : DbContext
+{
+    public Cca86170IrtContext()
+    {
+    }
+
+    public Cca86170IrtContext(DbContextOptions<Cca86170IrtContext> options)
+        : base(options)
+    {
+    }
+
+    public virtual DbSet<AccountForCustomer> AccountForCustomers { get; set; }
+
+    public virtual DbSet<AccountForEmployee> AccountForEmployees { get; set; }
+
+    public virtual DbSet<Bill> Bills { get; set; }
+
+    public virtual DbSet<BillDetail> BillDetails { get; set; }
+
+    public virtual DbSet<Cart> Carts { get; set; }
+
+    public virtual DbSet<CartDetail> CartDetails { get; set; }
+
+    public virtual DbSet<Class> Classes { get; set; }
+
+    public virtual DbSet<ConditionalStrain> ConditionalStrains { get; set; }
+
+    public virtual DbSet<ContentWork> ContentWorks { get; set; }
+
+    public virtual DbSet<Customer> Customers { get; set; }
+
+    public virtual DbSet<District> Districts { get; set; }
+
+    public virtual DbSet<Employee> Employees { get; set; }
+
+    public virtual DbSet<Genu> Genus { get; set; }
+
+    public virtual DbSet<IdentifyStrain> IdentifyStrains { get; set; }
+
+    public virtual DbSet<Inventory> Inventories { get; set; }
+
+    public virtual DbSet<IsolatorStrain> IsolatorStrains { get; set; }
+
+    public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+
+    public virtual DbSet<Partner> Partners { get; set; }
+
+    public virtual DbSet<Phylum> Phylums { get; set; }
+
+    public virtual DbSet<Project> Projects { get; set; }
+
+    public virtual DbSet<ProjectContent> ProjectContents { get; set; }
+
+    public virtual DbSet<Province> Provinces { get; set; }
+
+    public virtual DbSet<RoleForEmployee> RoleForEmployees { get; set; }
+
+    public virtual DbSet<ScienceNewspaper> ScienceNewspapers { get; set; }
+
+    public virtual DbSet<Species> Species { get; set; }
+
+    public virtual DbSet<Strain> Strains { get; set; }
+
+    public virtual DbSet<StrainApprovalHistory> StrainApprovalHistories { get; set; }
+
+    public virtual DbSet<Ward> Wards { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasDefaultSchema("cca86170_IRT");
+
+        modelBuilder.Entity<AccountForCustomer>(entity =>
+        {
+            entity.HasKey(e => e.IdCustomer).HasName("PK__AccountF__2D8FDE5F3EAD78D1");
+
+            entity.ToTable("AccountForCustomer", "dbo");
+
+            entity.HasIndex(e => e.Username, "UQ__AccountF__536C85E4B801C33A").IsUnique();
+
+            entity.Property(e => e.IdCustomer)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Customer");
+            entity.Property(e => e.Password).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(100);
+            entity.Property(e => e.Username).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdCustomerNavigation).WithOne(p => p.AccountForCustomer)
+                .HasForeignKey<AccountForCustomer>(d => d.IdCustomer)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountForCustomer_Customer");
+        });
+
+        modelBuilder.Entity<AccountForEmployee>(entity =>
+        {
+            entity.HasKey(e => e.IdEmployee).HasName("PK__AccountF__D9EE4F36F0DD668D");
+
+            entity.ToTable("AccountForEmployee", "dbo");
+
+            entity.HasIndex(e => e.Username, "UQ__AccountF__536C85E42ED9E7C4").IsUnique();
+
+            entity.Property(e => e.IdEmployee)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Employee");
+            entity.Property(e => e.Password).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(100);
+            entity.Property(e => e.Username).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdEmployeeNavigation).WithOne(p => p.AccountForEmployee)
+                .HasForeignKey<AccountForEmployee>(d => d.IdEmployee)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountForEmployee_Employee");
+        });
+
+        modelBuilder.Entity<Bill>(entity =>
+        {
+            entity.HasKey(e => e.IdBill).HasName("PK__Bill__F098680A50C6C28A");
+
+            entity.ToTable("Bill", "dbo");
+
+            entity.Property(e => e.IdBill)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Bill");
+            entity.Property(e => e.IdCustomer)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Customer");
+            entity.Property(e => e.IdEmployee)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Employee");
+            entity.Property(e => e.IdOrder).HasColumnName("ID_Order");
+            entity.Property(e => e.StatusOfBill)
+                .HasMaxLength(255)
+                .HasColumnName("Status_Of_Bill");
+            entity.Property(e => e.TypeOfBill)
+                .HasMaxLength(255)
+                .HasColumnName("Type_Of_Bill");
+
+            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.Bills)
+                .HasForeignKey(d => d.IdCustomer)
+                .HasConstraintName("FK_BillOffline_Customer");
+
+            entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.Bills)
+                .HasForeignKey(d => d.IdEmployee)
+                .HasConstraintName("FK_BillOffline_Employee");
+
+            entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.Bills)
+                .HasForeignKey(d => d.IdOrder)
+                .HasConstraintName("FK__Bill__ID_Order__787EE5A0");
+        });
+
+        modelBuilder.Entity<BillDetail>(entity =>
+        {
+            entity.HasKey(e => e.IdBillDetail).HasName("PK__BillDeta__3421CE5DF6706621");
+
+            entity.ToTable("BillDetail", "dbo");
+
+            entity.Property(e => e.IdBillDetail).HasColumnName("ID_BillDetail");
+            entity.Property(e => e.IdBill)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Bill");
+            entity.Property(e => e.IdStrain).HasColumnName("ID_Strain");
+
+            entity.HasOne(d => d.IdBillNavigation).WithMany(p => p.BillDetails)
+                .HasForeignKey(d => d.IdBill)
+                .HasConstraintName("FK_BillOfflineDetail_Bill");
+
+            entity.HasOne(d => d.IdStrainNavigation).WithMany(p => p.BillDetails)
+                .HasForeignKey(d => d.IdStrain)
+                .HasConstraintName("FK_BillOfflineDetail_Strain");
+        });
+
+        modelBuilder.Entity<Cart>(entity =>
+        {
+            entity.HasKey(e => e.IdCart).HasName("PK__Cart__72140ECF4521B7C8");
+
+            entity.ToTable("Cart", "dbo");
+
+            entity.Property(e => e.IdCart).HasColumnName("ID_Cart");
+            entity.Property(e => e.IdCustomer)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Customer");
+            entity.Property(e => e.TotalProduct).HasColumnName("Total_Product");
+
+            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.Carts)
+                .HasForeignKey(d => d.IdCustomer)
+                .HasConstraintName("FK_Cart_Customer");
+        });
+
+        modelBuilder.Entity<CartDetail>(entity =>
+        {
+            entity.HasKey(e => e.IdCartDetail).HasName("PK__CartDeta__19B4E082265697D3");
+
+            entity.ToTable("CartDetail", "dbo");
+
+            entity.Property(e => e.IdCartDetail).HasColumnName("ID_CartDetail");
+            entity.Property(e => e.IdCart).HasColumnName("ID_Cart");
+            entity.Property(e => e.IdStrain).HasColumnName("ID_Strain");
+            entity.Property(e => e.QuantityOfStrain).HasColumnName("Quantity_Of_Strain");
+
+            entity.HasOne(d => d.IdCartNavigation).WithMany(p => p.CartDetails)
+                .HasForeignKey(d => d.IdCart)
+                .HasConstraintName("FK_CartDetail_Cart");
+
+            entity.HasOne(d => d.IdStrainNavigation).WithMany(p => p.CartDetails)
+                .HasForeignKey(d => d.IdStrain)
+                .HasConstraintName("FK_CartDetail_Strain");
+        });
+
+        modelBuilder.Entity<Class>(entity =>
+        {
+            entity.HasKey(e => e.IdClass).HasName("PK__Class__D7CF744CEBBE3F43");
+
+            entity.ToTable("Class", "dbo");
+
+            entity.Property(e => e.IdClass).HasColumnName("ID_Class");
+            entity.Property(e => e.IdPhylum).HasColumnName("ID_Phylum");
+            entity.Property(e => e.NameClass)
+                .HasMaxLength(255)
+                .HasColumnName("Name_Class");
+
+            entity.HasOne(d => d.IdPhylumNavigation).WithMany(p => p.Classes)
+                .HasForeignKey(d => d.IdPhylum)
+                .HasConstraintName("FK_Class_Phylum");
+        });
+
+        modelBuilder.Entity<ConditionalStrain>(entity =>
+        {
+            entity.HasKey(e => e.IdCondition).HasName("PK__Conditio__BA54C9AE058E0375");
+
+            entity.ToTable("ConditionalStrain", "dbo");
+
+            entity.Property(e => e.IdCondition).HasColumnName("ID_Condition");
+            entity.Property(e => e.Duration)
+                .HasMaxLength(255)
+                .HasDefaultValueSql("(NULL)");
+            entity.Property(e => e.LightIntensity)
+                .HasMaxLength(255)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnName("Light_Intensity");
+            entity.Property(e => e.Medium)
+                .HasMaxLength(255)
+                .HasDefaultValueSql("(NULL)");
+            entity.Property(e => e.Temperature)
+                .HasMaxLength(255)
+                .HasDefaultValueSql("(NULL)");
+        });
+
+        modelBuilder.Entity<ContentWork>(entity =>
+        {
+            entity.HasKey(e => e.IdContentWork).HasName("PK__ContentW__951336A7A11484ED");
+
+            entity.ToTable("ContentWork", "dbo");
+
+            entity.Property(e => e.IdContentWork).HasColumnName("ID_ContentWork");
+            entity.Property(e => e.IdEmployee)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Employee");
+            entity.Property(e => e.IdProjectContent).HasColumnName("ID_ProjectContent");
+            entity.Property(e => e.NameContent).HasColumnName("Name_Content");
+            entity.Property(e => e.Priority).HasMaxLength(50);
+            entity.Property(e => e.Status).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.ContentWorks)
+                .HasForeignKey(d => d.IdEmployee)
+                .HasConstraintName("FK_ContentWork_Employee");
+
+            entity.HasOne(d => d.IdProjectContentNavigation).WithMany(p => p.ContentWorks)
+                .HasForeignKey(d => d.IdProjectContent)
+                .HasConstraintName("FK_ContentWork_ProjectContent");
+        });
+
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.HasKey(e => e.IdCustomer).HasName("PK__Customer__2D8FDE5FA4065F7F");
+
+            entity.ToTable("Customer", "dbo");
+
+            entity.HasIndex(e => e.Email, "UC_Customer").IsUnique();
+
+            entity.Property(e => e.IdCustomer)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Customer");
+            entity.Property(e => e.DateOfBirth).HasColumnName("Date_of_Birth");
+            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.FirstName).HasMaxLength(100);
+            entity.Property(e => e.FullName).HasMaxLength(100);
+            entity.Property(e => e.Gender).HasMaxLength(10);
+            entity.Property(e => e.LastName).HasMaxLength(100);
+            entity.Property(e => e.NameDistrict).HasMaxLength(255);
+            entity.Property(e => e.NameProvince).HasMaxLength(255);
+            entity.Property(e => e.NameWard).HasMaxLength(255);
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(20)
+                .HasColumnName("Phone_Number");
+        });
+
+        modelBuilder.Entity<District>(entity =>
+        {
+            entity.HasKey(e => e.IdDistricts).HasName("PK__District__A89A7C7060EE86CD");
+
+            entity.ToTable("Districts", "dbo");
+
+            entity.Property(e => e.Name).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdProvincesNavigation).WithMany(p => p.Districts)
+                .HasForeignKey(d => d.IdProvinces)
+                .HasConstraintName("FK__Districts__IdPro__02FC7413");
+        });
+
+        modelBuilder.Entity<Employee>(entity =>
+        {
+            entity.HasKey(e => e.IdEmployee).HasName("PK__Employee__D9EE4F3646E96B26");
+
+            entity.ToTable("Employee", "dbo");
+
+            entity.Property(e => e.IdEmployee)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Employee");
+            entity.Property(e => e.Address).HasMaxLength(255);
+            entity.Property(e => e.DateOfBirth).HasColumnName("Date_of_Birth");
+            entity.Property(e => e.Degree).HasMaxLength(100);
+            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.FirstName).HasMaxLength(100);
+            entity.Property(e => e.FullName).HasMaxLength(100);
+            entity.Property(e => e.Gender).HasMaxLength(10);
+            entity.Property(e => e.IdCard)
+                .HasMaxLength(12)
+                .HasColumnName("ID_Card");
+            entity.Property(e => e.IdRole).HasColumnName("ID_Role");
+            entity.Property(e => e.ImageEmployee).HasColumnName("Image_Employee");
+            entity.Property(e => e.JoinDate).HasColumnName("Join_Date");
+            entity.Property(e => e.LastName).HasMaxLength(100);
+            entity.Property(e => e.NameDistrict).HasMaxLength(255);
+            entity.Property(e => e.NameProvince).HasMaxLength(255);
+            entity.Property(e => e.NameWard).HasMaxLength(255);
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(20)
+                .HasColumnName("Phone_Number");
+
+            entity.HasOne(d => d.IdRoleNavigation).WithMany(p => p.Employees)
+                .HasForeignKey(d => d.IdRole)
+                .HasConstraintName("FK_Employee_RoleForEmployee");
+        });
+
+        modelBuilder.Entity<Genu>(entity =>
+        {
+            entity.HasKey(e => e.IdGenus).HasName("PK__Genus__7B3106858386727A");
+
+            entity.ToTable("Genus", "dbo");
+
+            entity.Property(e => e.IdGenus).HasColumnName("ID_Genus");
+            entity.Property(e => e.IdClass).HasColumnName("ID_Class");
+            entity.Property(e => e.NameGenus)
+                .HasMaxLength(255)
+                .HasColumnName("Name_Genus");
+
+            entity.HasOne(d => d.IdClassNavigation).WithMany(p => p.Genus)
+                .HasForeignKey(d => d.IdClass)
+                .HasConstraintName("FK_Genus_Class");
+        });
+
+        modelBuilder.Entity<IdentifyStrain>(entity =>
+        {
+            entity.HasKey(e => new { e.IdEmployee, e.IdStrain }).HasName("PK__Identify__23CDA4B46F3E2B59");
+
+            entity.ToTable("IdentifyStrain", "dbo");
+
+            entity.Property(e => e.IdEmployee)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Employee");
+            entity.Property(e => e.IdStrain).HasColumnName("ID_Strain");
+            entity.Property(e => e.YearOfIdentify).HasColumnName("Year_of_Identify");
+
+            entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.IdentifyStrains)
+                .HasForeignKey(d => d.IdEmployee)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_IdentifyStrain_Employee");
+
+            entity.HasOne(d => d.IdStrainNavigation).WithMany(p => p.IdentifyStrains)
+                .HasForeignKey(d => d.IdStrain)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_IdentifyStrain_Strain");
+        });
+
+        modelBuilder.Entity<Inventory>(entity =>
+        {
+            entity.HasKey(e => e.InventoryId).HasName("PK__Inventor__F5FDE6D32CC407D1");
+
+            entity.ToTable("Inventory", "dbo");
+
+            entity.Property(e => e.InventoryId).HasColumnName("InventoryID");
+            entity.Property(e => e.IdStrain).HasColumnName("ID_Strain");
+            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
+
+            entity.HasOne(d => d.IdStrainNavigation).WithMany(p => p.Inventories)
+                .HasForeignKey(d => d.IdStrain)
+                .HasConstraintName("FK__Inventory__ID_St__07C12930");
+        });
+
+        modelBuilder.Entity<IsolatorStrain>(entity =>
+        {
+            entity.HasKey(e => new { e.IdEmployee, e.IdStrain }).HasName("PK__Isolator__23CDA4B4F7CEEE39");
+
+            entity.ToTable("IsolatorStrain", "dbo");
+
+            entity.Property(e => e.IdEmployee)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Employee");
+            entity.Property(e => e.IdStrain).HasColumnName("ID_Strain");
+            entity.Property(e => e.YearOfIsolator).HasColumnName("Year_of_Isolator");
+
+            entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.IsolatorStrains)
+                .HasForeignKey(d => d.IdEmployee)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EmployeeStrain_Employee");
+
+            entity.HasOne(d => d.IdStrainNavigation).WithMany(p => p.IsolatorStrains)
+                .HasForeignKey(d => d.IdStrain)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EmployeeStrain_Strain");
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.HasKey(e => e.IdOrder).HasName("PK__Orders__EC9FA955748CEF53");
+
+            entity.ToTable("Orders", "dbo");
+
+            entity.Property(e => e.IdOrder).HasColumnName("ID_Order");
+            entity.Property(e => e.DeliveryAddress).HasMaxLength(255);
+            entity.Property(e => e.IdCustomer)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Customer");
+            entity.Property(e => e.IdEmployee)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Employee");
+            entity.Property(e => e.PaymentMethod).IsUnicode(false);
+            entity.Property(e => e.Status).HasMaxLength(255);
+            entity.Property(e => e.StatusOrder).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.IdCustomer)
+                .HasConstraintName("FK__Orders__ID_Custo__0C85DE4D");
+
+            entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.IdEmployee)
+                .HasConstraintName("FK__Orders__ID_Emplo__0D7A0286");
+        });
+
+        modelBuilder.Entity<OrderDetail>(entity =>
+        {
+            entity.HasKey(e => e.IdOrderDetail).HasName("PK__OrderDet__855D4EF58A4A1443");
+
+            entity.ToTable("OrderDetail", "dbo");
+
+            entity.Property(e => e.IdOrderDetail).HasColumnName("ID_OrderDetail");
+            entity.Property(e => e.IdOrder).HasColumnName("ID_Order");
+            entity.Property(e => e.IdStrain).HasColumnName("ID_Strain");
+
+            entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.IdOrder)
+                .HasConstraintName("FK__OrderDeta__ID_Or__0A9D95DB");
+
+            entity.HasOne(d => d.IdStrainNavigation).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.IdStrain)
+                .HasConstraintName("FK__OrderDeta__ID_St__0B91BA14");
+        });
+
+        modelBuilder.Entity<Partner>(entity =>
+        {
+            entity.HasKey(e => e.IdPartner).HasName("PK__Partner__B982253D157888B2");
+
+            entity.ToTable("Partner", "dbo");
+
+            entity.Property(e => e.IdPartner).HasColumnName("ID_Partner");
+            entity.Property(e => e.AddressCompany)
+                .HasMaxLength(255)
+                .HasColumnName("Address_Company");
+            entity.Property(e => e.BankName)
+                .HasMaxLength(255)
+                .HasColumnName("Bank_Name");
+            entity.Property(e => e.BankNumber)
+                .HasMaxLength(255)
+                .HasColumnName("Bank_Number");
+            entity.Property(e => e.NameCompany)
+                .HasMaxLength(255)
+                .HasColumnName("Name_Company");
+            entity.Property(e => e.NameDistrict).HasMaxLength(255);
+            entity.Property(e => e.NamePartner)
+                .HasMaxLength(255)
+                .HasColumnName("Name_Partner");
+            entity.Property(e => e.NameProvince).HasMaxLength(255);
+            entity.Property(e => e.NameWard).HasMaxLength(255);
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(20)
+                .HasColumnName("Phone_Number");
+            entity.Property(e => e.Position).HasMaxLength(255);
+            entity.Property(e => e.QhnsNumber)
+                .HasMaxLength(255)
+                .HasColumnName("QHNS_Number");
+        });
+
+        modelBuilder.Entity<Phylum>(entity =>
+        {
+            entity.HasKey(e => e.IdPhylum).HasName("PK__Phylum__DE75F90195CA0BFB");
+
+            entity.ToTable("Phylum", "dbo");
+
+            entity.Property(e => e.IdPhylum).HasColumnName("ID_Phylum");
+            entity.Property(e => e.NamePhylum)
+                .HasMaxLength(255)
+                .HasColumnName("Name_Phylum");
+        });
+
+        modelBuilder.Entity<Project>(entity =>
+        {
+            entity.HasKey(e => e.IdProject).HasName("PK__Project__D310AEBF54EEF2C7");
+
+            entity.ToTable("Project", "dbo");
+
+            entity.Property(e => e.IdProject)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Project");
+            entity.Property(e => e.IdEmployee)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Employee");
+            entity.Property(e => e.IdPartner).HasColumnName("ID_Partner");
+            entity.Property(e => e.Status).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.Projects)
+                .HasForeignKey(d => d.IdEmployee)
+                .HasConstraintName("FK_Project_Employee");
+
+            entity.HasOne(d => d.IdPartnerNavigation).WithMany(p => p.Projects)
+                .HasForeignKey(d => d.IdPartner)
+                .HasConstraintName("FK_Project_Partner");
+        });
+
+        modelBuilder.Entity<ProjectContent>(entity =>
+        {
+            entity.HasKey(e => e.IdProjectContent).HasName("PK__ProjectC__61A0E4E7A714E7F4");
+
+            entity.ToTable("ProjectContent", "dbo");
+
+            entity.Property(e => e.IdProjectContent).HasColumnName("ID_ProjectContent");
+            entity.Property(e => e.IdProject)
+                .HasMaxLength(50)
+                .HasColumnName("ID_Project");
+            entity.Property(e => e.NameContent).HasColumnName("Name_Content");
+            entity.Property(e => e.Priority).HasMaxLength(50);
+            entity.Property(e => e.Status).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdProjectNavigation).WithMany(p => p.ProjectContents)
+                .HasForeignKey(d => d.IdProject)
+                .HasConstraintName("FK_ProjectContent_Project");
+        });
+
+        modelBuilder.Entity<Province>(entity =>
+        {
+            entity.HasKey(e => e.IdProvinces).HasName("PK__Province__EED764E0EBCBEB7B");
+
+            entity.ToTable("Provinces", "dbo");
+
+            entity.Property(e => e.Name).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<RoleForEmployee>(entity =>
+        {
+            entity.HasKey(e => e.IdRole).HasName("PK__RoleForE__43DCD32DA02C7259");
+
+            entity.ToTable("RoleForEmployee", "dbo");
+
+            entity.Property(e => e.IdRole).HasColumnName("ID_Role");
+            entity.Property(e => e.RoleDescription).HasMaxLength(255);
+            entity.Property(e => e.RoleName).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<ScienceNewspaper>(entity =>
+        {
+            entity.HasKey(e => e.IdNewspaper).HasName("PK__ScienceN__DD46198134C0BE20");
+
+            entity.ToTable("ScienceNewspaper", "dbo");
+
+            entity.Property(e => e.IdNewspaper).HasColumnName("ID_Newspaper");
+            entity.Property(e => e.IdEmployee).HasMaxLength(50);
+            entity.Property(e => e.Title).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.ScienceNewspapers)
+                .HasForeignKey(d => d.IdEmployee)
+                .HasConstraintName("FK__ScienceNe__IdEmp__114A936A");
+        });
+
+        modelBuilder.Entity<Species>(entity =>
+        {
+            entity.HasKey(e => e.IdSpecies).HasName("PK__Species__33D1C117FCF11D8E");
+
+            entity.ToTable("Species", "dbo");
+
+            entity.Property(e => e.IdSpecies).HasColumnName("ID_Species");
+            entity.Property(e => e.IdGenus).HasColumnName("ID_Genus");
+            entity.Property(e => e.NameSpecies)
+                .HasMaxLength(255)
+                .HasColumnName("Name_Species");
+
+            entity.HasOne(d => d.IdGenusNavigation).WithMany(p => p.Species)
+                .HasForeignKey(d => d.IdGenus)
+                .HasConstraintName("FK_Species_Genus");
+        });
+
+        modelBuilder.Entity<Strain>(entity =>
+        {
+            entity.HasKey(e => e.IdStrain).HasName("PK__Strain__A23EB82ED9362917");
+
+            entity.ToTable("Strain", "dbo");
+
+            entity.Property(e => e.IdStrain).HasColumnName("ID_Strain");
+            entity.Property(e => e.AgitationResistance)
+                .HasMaxLength(255)
+                .HasColumnName("Agitation_Resistance");
+            entity.Property(e => e.CellSize)
+                .HasMaxLength(255)
+                .HasColumnName("Cell_Size");
+            entity.Property(e => e.Characteristics).HasMaxLength(255);
+            entity.Property(e => e.CollectionSite).HasColumnName("Collection_Site");
+            entity.Property(e => e.CommonName)
+                .HasMaxLength(255)
+                .HasColumnName("Common_Name");
+            entity.Property(e => e.Continent).HasMaxLength(255);
+            entity.Property(e => e.Country).HasMaxLength(255);
+            entity.Property(e => e.FormerName)
+                .HasMaxLength(255)
+                .HasColumnName("Former_Name");
+            entity.Property(e => e.GeneInformation).HasColumnName("Gene_Information");
+            entity.Property(e => e.IdCondition).HasColumnName("ID_Condition");
+            entity.Property(e => e.IdSpecies).HasColumnName("ID_Species");
+            entity.Property(e => e.ImageStrain)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnName("Image_Strain");
+            entity.Property(e => e.IsolationSource)
+                .HasMaxLength(255)
+                .HasColumnName("Isolation_Source");
+            entity.Property(e => e.Organization).HasMaxLength(255);
+            entity.Property(e => e.Publications).HasMaxLength(255);
+            entity.Property(e => e.RecommendedForTeaching)
+                .HasMaxLength(20)
+                .HasColumnName("Recommended_For_Teaching");
+            entity.Property(e => e.Remarks).HasMaxLength(255);
+            entity.Property(e => e.ScientificName)
+                .HasMaxLength(255)
+                .HasColumnName("Scientific_Name");
+            entity.Property(e => e.StateOfStrain)
+                .HasMaxLength(255)
+                .HasColumnName("State_of_Strain");
+            entity.Property(e => e.StrainNumber)
+                .HasMaxLength(100)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnName("Strain_Number");
+            entity.Property(e => e.SynonymStrain)
+                .HasMaxLength(255)
+                .HasColumnName("Synonym_Strain");
+            entity.Property(e => e.ToxinProducer)
+                .HasMaxLength(255)
+                .HasColumnName("Toxin_Producer");
+
+            entity.HasOne(d => d.IdConditionNavigation).WithMany(p => p.Strains)
+                .HasForeignKey(d => d.IdCondition)
+                .HasConstraintName("FK_Strain_Condition");
+
+            entity.HasOne(d => d.IdSpeciesNavigation).WithMany(p => p.Strains)
+                .HasForeignKey(d => d.IdSpecies)
+                .HasConstraintName("FK_Strain_Species");
+        });
+
+        modelBuilder.Entity<StrainApprovalHistory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__StrainAp__3214EC271766EF1E");
+
+            entity.ToTable("StrainApprovalHistory", "dbo");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.IdStrain).HasColumnName("ID_Strain");
+            entity.Property(e => e.Status).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdStrainNavigation).WithMany(p => p.StrainApprovalHistories)
+                .HasForeignKey(d => d.IdStrain)
+                .HasConstraintName("FK_StrainApprovalHistory_Strain");
+        });
+
+        modelBuilder.Entity<Ward>(entity =>
+        {
+            entity.HasKey(e => e.IdWards).HasName("PK__Wards__6E35F738815C6B55");
+
+            entity.ToTable("Wards", "dbo");
+
+            entity.Property(e => e.Name).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdDistrictsNavigation).WithMany(p => p.Wards)
+                .HasForeignKey(d => d.IdDistricts)
+                .HasConstraintName("FK__Wards__IdDistric__160F4887");
+        });
+
+        OnModelCreatingPartial(modelBuilder);
+    }
+
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+}
