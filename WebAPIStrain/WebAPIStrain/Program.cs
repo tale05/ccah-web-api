@@ -74,24 +74,26 @@ builder.Services.AddScoped<IScienceNewspaperRepository, ScienceNewspaperReposito
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 
-//backup dữ liệu
+// backup dữ liệu
 builder.Services.AddScoped<IBackupRepository, BackupRepository>();
 
-//send mail
+// send mail
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IMailServiceRepository, MailServiceRepository>();
 builder.Services.AddMemoryCache();
-//Momo payment
+
+// Momo payment
 builder.Services.Configure<MomoConfig>(builder.Configuration.GetSection("Momo"));
 builder.Services.AddHttpClient<IMomoService, MomoService>();
     //builder.Services.AddHttpClient();
 
-//VPPay
+// VPPay
 builder.Services.Configure<VNPayConfig>(builder.Configuration.GetSection("VNPay"));
 builder.Services.AddSingleton<IVNPayService, VNPayService>();
 builder.Services.AddHttpContextAccessor();
 
-
+// Đăng ký options
+builder.Services.Configure<SwaggerAuthOptions>(builder.Configuration.GetSection("SwaggerAuth"));
 
 
 //token
@@ -129,7 +131,7 @@ app.Use(async (context, next) =>
     await next();
 });
 
-app.UseMiddleware<SwaggerBasicAuthMiddleware>("admin", "123456");
+app.UseMiddleware<SwaggerBasicAuthMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();

@@ -4397,3 +4397,4 @@ C:\Users\ASUS\Downloads\ccah-web-strain\WebAPIStrain\WebAPIStrain\obj\Debug\net8
 C:\Users\ASUS\Downloads\ccah-web-strain\WebAPIStrain\WebAPIStrain\obj\Debug\net8.0\WebAPIStrain.pdb
 C:\Users\ASUS\Downloads\ccah-web-strain\WebAPIStrain\WebAPIStrain\obj\Debug\net8.0\WebAPIStrain.genruntimeconfig.cache
 C:\Users\ASUS\Downloads\ccah-web-strain\WebAPIStrain\WebAPIStrain\obj\Debug\net8.0\ref\WebAPIStrain.dll
+C:\Users\ASUS\Downloads\ccah-web-strain\WebAPIStrain\WebAPIStrain\obj\Debug\net8.0\WebAPIStrain.sourcelink.json
